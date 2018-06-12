@@ -1,0 +1,25 @@
+import time
+def tm():
+    print ('*'*50)
+    print ('请稍等,下一场即将开始')
+    time.sleep(0.5)
+    print ('one')
+    time.sleep(0.3)
+    print ('two')
+    time.sleep(0.3)
+    print ('three')
+    time.sleep(0.3)
+    print ('begin')
+    time.sleep(0.3)
+    print ('*'*50)
+
+def bs(a):
+    a.jump()
+    time.sleep(1)
+    a.run()
+    time.sleep(1)
+    a.zhiquan()
+    time.sleep(1)
+    a.ok()
+    print (a)
+    print ('本次比赛的储存位置是%d'%id(a))

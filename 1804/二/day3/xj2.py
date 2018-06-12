@@ -1,0 +1,5 @@
+f = open ('1.txt','w+')
+f.seek(0,0)
+p = f.readline()
+print (p)
+f.close()
