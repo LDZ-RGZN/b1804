@@ -50,9 +50,3 @@ try:
     print ('*'*50)
 except Exception as result:
     print ('程序出现了问题:%s'%result)
-
-
-
-
-
-
