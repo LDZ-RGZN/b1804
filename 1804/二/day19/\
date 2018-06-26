@@ -1,0 +1,82 @@
+#-*- coding=utf-8 -*-
+import pygame
+import time
+class Plane(object):
+    def __init__(self,img_path,screen,x,y):
+        self.screen = screen  #创建的窗口 对象
+        self.x = x
+        self.y = y
+        self.img_path = img_path
+        #定义好尺寸
+#base_________________________________________
+class BasePlane(Plane):
+    def __init__(self,img_path,screen,x,y):
+        Plane.__init__(self,img_path,screen,x,y)
+
+        self.rect = pygame.Rect(self.x,self.y,0,0)
+        self.bullet_list = []
+        self.bullet_remove = [] #保持子弹引用
+        self.plane = pygame.image.load(self.img_path)#飞机图片
+        #___________________________________________
+        self.hit = False
+        self.bomb_list = [] #保存爆炸效果
+        self.__create_image() #添加图片
+        self.image_num = 0 #while Ture增加次数,效果延迟
+        self.image_index = 0 #爆炸图片id
+
+    def __create_image(self):
+        self.bomb_list.append(pygame.image.load('./images/hero_blowup_n1.png'))
+        self.bomb_list.append(pygame.image.load('./images/hero_blowup_n2.png'))
+        self.bomb_list.append(pygame.image.load('./images/hero_blowup_n3.png'))
+        self.bomb_list.append(pygame.image.load('./images/hero_blowup_n4.png'))
+    def display(self):
+        if self.hit == True:
+            self.screen.blit(self.bomb_list[self.image_index],self.rect)
+            self.image_num += 1
+            if self.image_num == 7:
+                self.image_index += 1
+                self.image_num = 0
+            if self.image_index > 3:
+                time.sleep(1)
+                exit()
+        else:
+            self.screen.blit(self.plane,self.rect)
+        if len(self.bullet_list) > 0:
+            for bullet in self.bullet_list:
+                bullet.display()
+                bullet.move()
+                if bullet.judge():
+                    self.bullet_remove.append(bullet)
+            if len(self.bullet_remove) > 0:
+                for i in self.bullet_remove:
+                    self.bullet_list.remove(i)
+                del self.bullet_remove[:]
+    def bomb(self):
+        self.hit = True
+
+
+#子弹类________________________________________
+class Bullet(object):
+    '''这是 子弹的抽象类'''
+    def __init__(self,img_path,screen,x,y):
+        self.screen = screen
+        self.x = x + 40
+        self.y = y + 30
+        self.img_path = img_path
+        self.bullet = pygame.image.load(self.img_path)#子弹图片
+    def display(self):
+        self.screen.blit(self.bullet,(self.x,self.y)) #设置子弹
+#______________________________________________
+
+def frame(y):
+    if y <= 0 :
+        y = 0
+    elif y >= 386:
+        y = 386
+    return y
+def frameo(x):
+    if x <= 0:
+        x = 0
+    elif x >= 300:
+        x = 300
+    return x

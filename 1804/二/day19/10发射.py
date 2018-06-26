@@ -97,7 +97,6 @@ class EnemyBullet(object):
         else:
             return False
 
-
 def key_control(hero,move_step):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -120,9 +119,6 @@ def key_control(hero,move_step):
         hero.rect.y += move_step
     elif keys_pressed[pygame.K_r]:
         hero.fire()
-
-
-
 
 def main():
     #创建游戏窗口

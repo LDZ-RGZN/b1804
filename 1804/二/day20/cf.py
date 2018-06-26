@@ -1,0 +1,10 @@
+from per import *
+s1 = Student ('jack',25,'fottball')
+s1.showperson()
+print ('*'*20)
+s1.construction('rose',30,'basketball')
+s1.showperson()
+print ('*'*20)
+s1.showstudent()
+print ('*'*20)
+Student.testbug()
