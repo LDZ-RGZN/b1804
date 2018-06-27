@@ -15,16 +15,28 @@ class EnemyPlane(BasePlane):
     def __init__(self,img_path,screen):
         BasePlane.__init__(self,img_path,screen,0,0)
         self.flag = 'right'
-
+        self.ky = False
     def move(self):
         if self.flag == 'right':
             self.rect.x += 2
+            if self.ky == True:
+                self.rect.y += 10
+                self.ky = False
         else:
             self.rect.x -= 2
+            if self.ky == True:
+                self.rect.y += 1
+                self.ky = False
         if self.rect.x > 330 - self.rect.width:
             self.flag = 'left'
+            self.ky = True
+
         elif self.rect.x <= 0:
             self.flag = 'right'
+        if self.rect.x == 0:
+            self.ky = True
+        elif self.rect.x == 320:
+            self.ky = True
     def fire(self):
         self.bullet_list.append(Enemy_Bullet('./images/bullet1.png',self.screen,self.rect.x,self.rect.y))
 #爆炸类_____________________________________________________________
@@ -41,7 +53,7 @@ class Hero_Bullet(Bullet):
     def __init__(self,img_path,screen,x,y):
         Bullet.__init__(self,img_path,screen,x,y)
     def move(self):
-        self.y -= 2
+        self.y -= 4
     def judge(self):
         if self.y < 0:
             return True
