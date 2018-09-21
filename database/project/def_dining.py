@@ -1,5 +1,5 @@
 from pymysql import *
-import time
+import time,random
 #基本信息____________________________________________
 def home():
     print('='*50)
@@ -13,8 +13,10 @@ def letter():
     print('删除菜品请按:3')
     print('修改菜品名称即价格请按:4')
     print('点餐餐请按:5')
-    print('打印订单结算额:6')
-    print('退出本次操作请按:7')
+    print('打印订单结算额请按:6')
+    print('查询会员用户请按:7')
+    print('账户设置请按:8')
+    print('退出本次操作请按:9')
     print('='*50)
 
 def one():
@@ -24,7 +26,17 @@ def one():
     print('查询指定菜品以及单价请按:3')
     print('='*50)
 
-#获取数据库
+def set():
+    print('登录账户请按:1')
+    print('注册账户请按:2')
+    print('='*50)
+
+def set_s():
+    print('切换账户请按:1')
+    print('注册账户请按:2')
+    print('='*50)
+
+#获取数据库___________________________________________
 def link():
     conn = connect(host='localhost',port=3306,database='dining',user='root',password='150136',charset='utf8')
     cs1 = conn.cursor()
@@ -103,10 +115,34 @@ def order(table,greens,uid,discount):
     cs1,conn = link()
     cs1 = conn.cursor()
     count = cs1.execute('insert into DingDan(table_number,greens_number,uid,discount) values(%d,%d,%d,%d)'%(table,greens,uid,discount))
-
     close(cs1,conn)
 
-def main():
+def user():
+    cs1,conn = link()
+    cs1 = conn.cursor()
+    count = cs1.execute('select mem.account,user.name,user.gender,user.age,user.address,user.phone  FROM member mem JOIN user  ON mem.uid = user.uid')
+    for i in range(count):
+        result = cs1.fetchone()
+        print(result)
+    close(cs1,conn)
+
+def user_one(account):
+    cs1,conn = link()
+    cs1 = conn.cursor()
+    count = cs1.execute('select mem.account,user.name,user.gender,user.age,user.address,user.phone  FROM member mem JOIN user  ON mem.uid = user.uid where mem.account = %d'%account)
+    result = cs1.fetchone()
+    print(result)
+    close(cs1,conn)
+
+
+#注册函数______________________________________________
+def register(account,password):
+    cs1,conn = link()
+    cs1 = conn.cursor()
+    count = cs1.execute('insert into user_password values(%d,"%s")'%(account,password))
+    close(cs1,conn)
+
+def body():
     home()
     while True:
         letter()
@@ -180,34 +216,150 @@ def main():
             order_select(table)
             print('金额打印成功')
         elif button == 7:
+            print('查询全部用户信息:1')
+            print('查询指定用户信息:2')
+            button7 = int(input('请选择您需要的服务:'))
+            if button7 == 1:
+                print('请稍后...')
+                time.sleep(1)
+                user()
+                print('查询成功')
+            elif button7 == 2:
+                print('请稍后...')
+                time.sleep(1)
+                account = int(input('请输入会员号:'))
+                user_one(account)
+                print('查询成功')
+        elif button == 8:
+            set_s()
+            button8 = int(input('请输入您需要的服务'))
+            if button8 == 1:
+                swi()
+            elif button8 == 2:
+                print('正在随机账户,请稍后...')
+                account = random.randint(0000000000,9999999999)
+                time.sleep(1)
+                print('账户随机完成,正在打印...')
+                print('您的账户是%d,请妥善保管'%account)
+                a = 4
+                while a > 0:
+                    password = input('请输新入密码')
+                    password2 = input('请再次输入输入密码')
+                    if password == password2:
+                        print('正在保存,请稍等...')
+                        time.sleep(1)
+                        register(account,password)
+                        print('保存成功,即将跳回主菜单')
+                        time.sleep(0.5)
+                        break
+                    elif password != password2:
+                        print('两次输入的密码不正确,请重新输入')
+                        a -= 1
+                        if a > 0:
+                            print('含有%d次机会'%a)
+                        else:
+                            print('您已经没有机会了,请重新获取账户')
+        elif button == 9:
             break
 
 
 
 
 
+#切换函数______________________________________________
+def swi():
+    cs1,conn = link()
+    cs1 = conn.cursor()
+    a = 4
+    while a > 0:
+        account = int(input('请输入您的账户:'))
+        print('正在验证...')
+        time.sleep(0.5)
+        count_u = cs1.execute('select account from user_password where account={}'.format(account))
 
+        if count_u == 1:
+            print('ok')
+            b = 4
+            while b > 0:
+                a = cs1.fetchone()
+                password = input('请输入您的密码:')
+                print('正在验证...')
+                time.sleep(0.5)
+                count_p = cs1.execute('select password from user_password where password="{}"'.format(password))
+                c = cs1.fetchone()
+                print(count_p)
+                if count_p >= 1:
+                    if password == c[0]:
+                        print('成功登录')
+                        break
+                else:
+                    print('登录失败')
+                    b -= 1
+                    if b > 0:
+                        print('含有%d次机会'%b)
+                    else:
+                        print('您已经没有机会了')
 
+            break
+        else:
+            print('账户有误')
+            a -= 1
+            if a > 0:
+                print('含有%d次机会'%a)
+            else:
+                print('您已经没有机会了')
 
+    close(cs1,conn)
 
+#主体______________________________________________
+def main():
+    cs1,conn = link()
+    cs1 = conn.cursor()
+    a = 4
+    while a > 0:
+        account = int(input('请输入您的账户:'))
+        print('正在验证...')
+        time.sleep(0.5)
+        count_u = cs1.execute('select account from user_password where account={}'.format(account))
 
+        if count_u == 1:
+            print('ok')
+            b = 4
+            while b > 0:
+                a = cs1.fetchone()
+                password = input('请输入您的密码:')
+                print('正在验证...')
+                time.sleep(0.5)
+                count_p = cs1.execute('select password from user_password where password="{}"'.format(password))
+                c = cs1.fetchone()
+                print(count_p)
+                if count_p >= 1:
+                    if password == c[0]:
+                        print('成功登录')
+                        body()
+                        break
+                else:
+                    print('登录失败')
+                    b -= 1
+                    if b > 0:
+                        print('含有%d次机会'%b)
+                    else:
+                        print('您已经没有机会了')
 
+            break
+        else:
+            print('账户有误')
+            a -= 1
+            if a > 0:
+                print('含有%d次机会'%a)
+            else:
+                print('您已经没有机会了')
 
-
-
-
-
-
-
-
-
-
+    close(cs1,conn)
 
 
 if __name__ == '__main__':
     main()
-
-
 
 
 
