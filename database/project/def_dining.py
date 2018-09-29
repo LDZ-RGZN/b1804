@@ -16,12 +16,8 @@ def letter():
     print('打印订单结算额请按:6')
     print('查询会员用户请按:7')
     print('账户设置请按:8')
-<<<<<<< HEAD
     print('外卖订单请按:9')
     print('退出本次操作请按:10')
-=======
-    print('退出本次操作请按:9')
->>>>>>> 9ad448752fe66d0d2b8c6422ca860a397008780c
     print('='*50)
 
 def one():
@@ -139,7 +135,6 @@ def user_one(account):
     print(result)
     close(cs1,conn)
 
-<<<<<<< HEAD
 def take():
     cs1,conn = link()
     cs1 = conn.cursor()
@@ -163,16 +158,13 @@ def take_one(tid):
     result = cs1.fetchone()
     print(result)
 
-=======
->>>>>>> 9ad448752fe66d0d2b8c6422ca860a397008780c
-
 #注册函数______________________________________________
 def register(account,password):
     cs1,conn = link()
     cs1 = conn.cursor()
     count = cs1.execute('insert into user_password values(%d,"%s")'%(account,password))
     close(cs1,conn)
-
+#body________________________________________________
 def body():
     home()
     while True:
@@ -291,7 +283,6 @@ def body():
                         else:
                             print('您已经没有机会了,请重新获取账户')
         elif button == 9:
-<<<<<<< HEAD
             print('添加订单请按:1')
             print('查看所有订单请按:2')
             print('查看指定订单请按:3')
@@ -316,8 +307,6 @@ def body():
             break
         else:
             print('输入有误')
-=======
->>>>>>> 9ad448752fe66d0d2b8c6422ca860a397008780c
             break
 
 #切换函数______________________________________________
@@ -364,53 +353,6 @@ def swi():
                 print('您已经没有机会了')
 
     close(cs1,conn)
-
-#主体______________________________________________
-def main():
-    cs1,conn = link()
-    cs1 = conn.cursor()
-    a = 4
-    while a > 0:
-        account = int(input('请输入您的账户:'))
-        print('正在验证...')
-        time.sleep(0.5)
-        count_u = cs1.execute('select account from user_password where account={}'.format(account))
-
-        if count_u == 1:
-            print('ok')
-            b = 4
-            while b > 0:
-                a = cs1.fetchone()
-                password = input('请输入您的密码:')
-                print('正在验证...')
-                time.sleep(0.5)
-                count_p = cs1.execute('select password from user_password where password="{}"'.format(password))
-                c = cs1.fetchone()
-                print(count_p)
-                if count_p >= 1:
-                    if password == c[0]:
-                        print('成功登录')
-                        body()
-                        break
-                else:
-                    print('登录失败')
-                    b -= 1
-                    if b > 0:
-                        print('含有%d次机会'%b)
-                    else:
-                        print('您已经没有机会了')
-
-<<<<<<< HEAD
-            break
-        else:
-            print('账户有误')
-            a -= 1
-            if a > 0:
-                print('含有%d次机会'%a)
-            else:
-                print('您已经没有机会了')
-
-=======
 #切换函数______________________________________________
 def swi():
     cs1,conn = link()
@@ -455,8 +397,7 @@ def swi():
                 print('您已经没有机会了')
 
     close(cs1,conn)
-
-#主体______________________________________________
+#运行______________________________________________
 def main():
     cs1,conn = link()
     cs1 = conn.cursor()
@@ -500,101 +441,9 @@ def main():
             else:
                 print('您已经没有机会了')
 
->>>>>>> 9ad448752fe66d0d2b8c6422ca860a397008780c
-    close(cs1,conn)
 
+#主体______________________________________________
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
